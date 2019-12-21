@@ -1,0 +1,16 @@
+{
+  "name": "socialmediaapp",
+  "version": "1.0.0",
+  "description": "Making social media application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Winston",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "mongoose": "^5.8.2"
+  }
+}
