@@ -16,7 +16,7 @@
             {{else}}
             <form action="/addEmail" method="POST">
             <input type="text" name="email" class="form-control"
-            placeholder="Enter email address">
+            placeholder="Enter email address" required>
             <button type="submit" class="btn btn-danger">Save</button>
             </form>
             {{/if}}
@@ -26,7 +26,7 @@
             <form action="/addPhone" method="POST" class="form-inline">
             <div class="form-group mx-sm-3 mb-2">
                 <input type="number" name="phone" class="form-control" 
-                placeholder="Enter Phone Number">
+                placeholder="Enter Phone Number" required>
             </div>
             <button type="submit" class="btn btn-primary mb-2">
                 <i class="fa fa-check"></i></button>
@@ -38,7 +38,7 @@
             <form action="/addLocation" method="POST" class="form-inline">
             <div class="form-group mx-sm-3 mb-2">
                 <input type="text" name="location" class="form-control" 
-                placeholder="Enter your location / city and country">
+                placeholder="Enter your location / city and country" required>
             </div>
             <button type="submit" class="btn btn-primary mb-2">
                 <i class="fa fa-check"></i></button>

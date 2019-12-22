@@ -93,6 +93,14 @@ app.get('/profile', ensureAuthentication, (req, res) => {
         });
     })
 });
+// Handle route for all users
+app.get('/users', (req, res) => {
+    User.find({}).then((users) => {
+        res.render('users', {
+            users:users
+        });
+    });
+});
 // Handle Email post route
 app.post('/addEmail', (req, res) => {
     const email = req.body.email;
