@@ -9,8 +9,10 @@ const cookieParser = require('cookie-parser')
 // Connect to MongoURI expoerted from external file
 const keys = require('./config/keys');
 // User Collection
-const User = require('./models/user')
+const User = require('./models/user');
+// Link passports to the server
 require('./passport/google.passport');
+require('./passport/facebook.passport');
 // initialize application
 const app = express();
 //Exoress config
@@ -65,6 +67,17 @@ app.get('/auth/google/callback',
     // Successful authentication, redirect home.
     res.redirect('/profile');
   });
+// FACEBOOK AUTH ROUTE
+app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/' }),
+  (req, res) => {
+    // Successful authentication, redirect home.
+    res.redirect('/profile');
+  });
+// HANDLE profile route
 app.get('/profile', (req, res) => {
     User.findById({_id:req.user._id})
     .then((user) => {
