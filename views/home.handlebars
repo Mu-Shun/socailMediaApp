@@ -1,9 +1,6 @@
 <div id="homepage" class="container">
     <h1>Welcome</h1>
     <h1>Social Media App</h1>
-    {{#if user}}
-    <p>You are logged in...</p>
-    {{else}}
     <h1>
         <a href="/auth/google" class="btn-social btn-gplus btn-lg">
         <i class="fa fa-google-plus"></i> Signup with Google</a>
@@ -12,9 +9,8 @@
         <a href="/auth/facebook" class="btn-social btn-facebook btn-lg">
         <i class="fa fa-facebook"></i> Signup with Facebook</a>
     </h1>
-    <h1>
+    {{!-- <h1>
         <a href="/auth/instagram" class="btn-social btn-instagram btn-lg">
         <i class="fa fa-instagram"></i> Signup with Instagram</a>
-    </h1>
-    {{/if}}
+    </h1> --}}
 </div>
