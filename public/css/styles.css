@@ -67,3 +67,19 @@ h1{
 .reddd{
     color: red;
 }
+#MAP{
+    text-align: center;
+}
+#user-image{
+    width: 150px;
+    height: auto
+}
+#users-box{
+    margin: 5px 5px 5px 5px ;
+}
+.row{
+    width: 100%
+}
+#profileMargin{
+    margin-left: 10px;
+}

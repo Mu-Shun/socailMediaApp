@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+        
+        <div class="col-sm-4">
+            <h1 id="MAP">Make a payment</h1>
+            <p id="MAP">Pay $5 to create and share post</p>
+            <p id="MAP">You can type 4242 4242 4242 4242 at Visa card for test and random month-year and CVC</p>
+            <br>
+            <form id="MAP" action="/acceptPayment" method="POST">
+                <script src="https://checkout.stripe.com/checkout.js"
+                class="stripe-button"
+                data-key="{{StripePublishableKey}}"
+                data-amount="500"
+                data-name="Payment for Posting"
+                data-description="(Just Kidding)"
+                data-image="/images/images.png"
+                data-locale="auto">
+                </script>
+            </form>
+        </div>
+    </div>
+</div>

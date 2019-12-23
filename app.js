@@ -6,9 +6,10 @@ const passport = require('passport')
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
 // Connect to MongoURI expoerted from external file
 const keys = require('./config/keys');
+const stripe = require('stripe')(keys.StripeSecretKey)
 // Load models
 const User = require('./models/user');
 const Post = require('./models/post');
@@ -107,7 +108,7 @@ app.get('/users', ensureAuthentication, (req, res) => {
     });
 });
 // Display one user profile
-app.get('/user/:id', (req, res) => {
+app.get('/user/:id', ensureAuthentication, (req, res) => {
     User.findById({_id: req.params.id})
     .then((user) => {
         res.render('user', {
@@ -116,7 +117,7 @@ app.get('/user/:id', (req, res) => {
     });
 });
 // Handle Email post route
-app.post('/addEmail', (req, res) => {
+app.post('/addEmail', ensureAuthentication, (req, res) => {
     const email = req.body.email;
     User.findById({_id: req.user._id})
     .then((user) => {
@@ -127,8 +128,8 @@ app.post('/addEmail', (req, res) => {
         });
     });
 });
-// Disply single users all public posts
-app.get('/showposts/:id', (req, res) => {
+// Display single users all public posts
+app.get('/showposts/:id', ensureAuthentication, (req, res) => {
     Post.find({user: req.params.id, status: 'public'})
     .populate('user')
     .sort({data: 'desc'})
@@ -139,7 +140,7 @@ app.get('/showposts/:id', (req, res) => {
     });
 });
 // Handle Phone Post Route
-app.post('/addPhone', (req, res) => {
+app.post('/addPhone', ensureAuthentication, (req, res) => {
     const phone = req.body.phone;
     User.findById({_id: req.user._id})
     .then((user) => {
@@ -151,7 +152,7 @@ app.post('/addPhone', (req, res) => {
     });
 });
 // Handle Location Post Route
-app.post('/addLocation', (req, res) => {
+app.post('/addLocation', ensureAuthentication, (req, res) => {
     const location = req.body.location;
     User.findById({_id: req.user._id})
     .then((user) => {
@@ -163,11 +164,39 @@ app.post('/addLocation', (req, res) => {
     });
 });
 // Handle Get Routes for Posts
-app.get('/addPost', (req, res) => {
+app.get('/addPost', ensureAuthentication, (req, res) => {
+    res.render('payment', {
+        StripePublishableKey: keys.StripePublishableKey
+    });
+    //res.render('addPost');
+});
+// Handle payment post route
+app.post('/acceptPayment', ensureAuthentication, (req, res) => {
+    const amount = 500;
+    stripe.customers.create({
+        email: req.body.stripeEmail,
+        source: req.body.stripeToken 
+    })
+    .then((customer) => {
+        stripe.charges.create({
+            amount: amount,
+            currency: 'usd',
+            description: 'Payment to create post',
+            customer: customer.id
+        })
+        .then((charge) => {
+            res.render('success', {
+                charge:charge
+            });
+        });
+    });
+});
+// Handle route to display form to create post
+app.get('/displayPostForm', ensureAuthentication, (req, res) => {
     res.render('addPost')
 });
 // Handle post route
-app.post('/savePost', (req, res) => {
+app.post('/savePost', ensureAuthentication, (req, res) => {
     console.log(req.body);
     var allowComments;
     if(req.body.allowComments){
@@ -188,7 +217,7 @@ app.post('/savePost', (req, res) => {
     });
 });
 // Handle edit Post route
-app.get('/editPost/:id', (req, res) => {
+app.get('/editPost/:id', ensureAuthentication, (req, res) => {
     Post.findOne({_id:req.params.id})
     .then((post) => {
         res.render('editingPost', {
@@ -197,7 +226,7 @@ app.get('/editPost/:id', (req, res) => {
     });
 });
 // Handle Put ROUTE To Save Edited Post
-app.put('/editingPost/:id', (req, res) => {
+app.put('/editingPost/:id', ensureAuthentication, (req, res) => {
     Post.findOne({_id: req.params.id})
     .then((post) => {
         var allowComments;
@@ -217,7 +246,7 @@ app.put('/editingPost/:id', (req, res) => {
     });
 });
 // Handle Delete Routes
-app.delete('/:id', (req, res) => {
+app.delete('/:id', ensureAuthentication, (req, res) => {
     Post.remove({_id: req.params.id})
     .then(() => {
         res.redirect('profile');
@@ -236,7 +265,7 @@ app.get('/posts', ensureAuthentication, (req, res) => {
     });
 });
 // save comments into database
-app.post('/addComment/:id', (req, res) => {
+app.post('/addComment/:id', ensureAuthentication, (req, res) => {
     Post.findOne({_id: req.params.id})
     .then((post) => {
         const newComment = {
