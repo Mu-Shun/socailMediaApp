@@ -81,5 +81,23 @@ h1{
     width: 100%
 }
 #profileMargin{
-    margin-left: 10px;
+    margin-left: 100px;
+}
+#giveMargin{
+    margin-top: 20px;
+}
+}
+#giveMargin2{
+    margin-top: 20px;
+}
+#giveMargin3{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#giveMargin4{
+    margin-top: 20px;
+    margin-left: 100px;
+}
+#giveMargin5{
+    margin-left: 100px;
 }
